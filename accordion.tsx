@@ -1,18 +1,36 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { CircleDollarSign, Rocket, CheckCircle, Handshake } from "lucide-react";
 
-const projects = [
+const steps = [
   {
-    title: "EcoleIvoire",
-    category: "Plateforme éducative",
-    url: "https://ecoleivoire.online",
-    image: "https://api.microlink.io/?url=https://ecoleivoire.online&screenshot=true&meta=false&embed=screenshot.url",
+    icon: Handshake,
+    step: "1",
+    title: "Discussion & Devis",
+    description: "Nous discutons de votre projet et vous recevez un devis détaillé gratuit.",
+  },
+  {
+    icon: CircleDollarSign,
+    step: "2",
+    title: "Paiement de 50%",
+    description: "Vous réglez la moitié du montant pour lancer la création de votre site.",
+  },
+  {
+    icon: Rocket,
+    step: "3",
+    title: "Développement & Validation",
+    description: "Nous créons votre site. Vous validez le résultat avant la mise en ligne.",
+  },
+  {
+    icon: CheckCircle,
+    step: "4",
+    title: "Déploiement & Solde",
+    description: "Votre site est mis en ligne, vous réglez les 50% restants. C'est parti !",
   },
 ];
 
-const PortfolioSection = () => {
+const HowItWorksSection = () => {
   return (
-    <section id="projets" className="py-24 bg-secondary/30">
+    <section id="fonctionnement" className="py-24">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -22,52 +40,57 @@ const PortfolioSection = () => {
           className="text-center mb-16"
         >
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Nos <span className="text-accent">Projets</span>
+            Comment ça <span className="text-accent">fonctionne</span> ?
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Découvrez quelques-unes de nos réalisations récentes.
+            Un processus simple et transparent en 4 étapes.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {projects.map((project, i) => (
-            <motion.a
-              key={project.title}
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto relative">
+          {/* Connecting line (desktop) */}
+          <div className="hidden md:block absolute top-14 left-[12.5%] right-[12.5%] h-0.5 bg-border" />
+
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-primary/5 border border-border cursor-pointer"
+              transition={{ duration: 0.5, delay: i * 0.12 }}
+              className="relative flex flex-col items-center text-center"
             >
-              {/* Screenshot */}
-              <img
-                src={project.image}
-                alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover object-top"
-                loading="lazy"
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-primary-foreground">
-                <ExternalLink className="h-8 w-8 mb-3" />
-                <h3 className="font-display text-lg font-semibold">{project.title}</h3>
-                <p className="text-sm opacity-80">{project.category}</p>
+              <div className="relative z-10 w-14 h-14 rounded-full bg-accent text-accent-foreground flex items-center justify-center mb-4 shadow-lg shadow-accent/20">
+                <step.icon className="h-6 w-6" />
               </div>
-
-              {/* Default title */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-primary/60 to-transparent group-hover:opacity-0 transition-opacity">
-                <h3 className="font-display text-sm font-semibold text-white">{project.title}</h3>
-                <p className="text-xs text-white/70">{project.category}</p>
-              </div>
-            </motion.a>
+              <span className="text-xs font-bold text-accent mb-1">Étape {step.step}</span>
+              <h3 className="font-display text-lg font-semibold mb-2">{step.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-[220px]">
+                {step.description}
+              </p>
+            </motion.div>
           ))}
         </div>
+
+        {/* Payment highlight */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-14 max-w-2xl mx-auto bg-accent/10 border border-accent/30 rounded-2xl p-6 text-center"
+        >
+          <p className="font-display font-semibold text-lg mb-1">
+            💰 Paiement en 2 fois
+          </p>
+          <p className="text-muted-foreground text-sm">
+            <span className="font-semibold text-foreground">50% à la commande</span> pour démarrer le projet —{" "}
+            <span className="font-semibold text-foreground">50% à la livraison</span> après validation et mise en ligne.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-export default PortfolioSection;
+export default HowItWorksSection;

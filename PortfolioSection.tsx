@@ -1,96 +1,148 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { CircleDollarSign, Rocket, CheckCircle, Handshake } from "lucide-react";
+import { MessageCircle, MapPin, Mail, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
-const steps = [
-  {
-    icon: Handshake,
-    step: "1",
-    title: "Discussion & Devis",
-    description: "Nous discutons de votre projet et vous recevez un devis détaillé gratuit.",
-  },
-  {
-    icon: CircleDollarSign,
-    step: "2",
-    title: "Paiement de 50%",
-    description: "Vous réglez la moitié du montant pour lancer la création de votre site.",
-  },
-  {
-    icon: Rocket,
-    step: "3",
-    title: "Développement & Validation",
-    description: "Nous créons votre site. Vous validez le résultat avant la mise en ligne.",
-  },
-  {
-    icon: CheckCircle,
-    step: "4",
-    title: "Déploiement & Solde",
-    description: "Votre site est mis en ligne, vous réglez les 50% restants. C'est parti !",
-  },
-];
+const ContactSection = () => {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-const HowItWorksSection = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) {
+      toast({ title: "Veuillez remplir tous les champs", variant: "destructive" });
+      return;
+    }
+    const subject = encodeURIComponent(`Message de ${form.name}`);
+    const body = encodeURIComponent(`Nom: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
+    window.open(`mailto:digitalrocket31@gmail.com?subject=${subject}&body=${body}`, "_self");
+    toast({ title: "Redirection vers votre messagerie…" });
+    setForm({ name: "", email: "", message: "" });
+  };
+
   return (
-    <section id="fonctionnement" className="py-24">
+    <section id="contact" className="py-24">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+          className="text-center mb-16">
+          
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Comment ça <span className="text-accent">fonctionne</span> ?
+            <span className="text-accent">Contactez</span>-nous à Abidjan
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Un processus simple et transparent en 4 étapes.
+            Prêt à lancer votre projet web en Côte d'Ivoire ? Parlons-en !
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto relative">
-          {/* Connecting line (desktop) */}
-          <div className="hidden md:block absolute top-14 left-[12.5%] right-[12.5%] h-0.5 bg-border" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+          {/* Form */}
+          <motion.form
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="space-y-5">
+            
+            <Input
+              placeholder="Votre nom"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              className="rounded-lg" />
+            
+            <Input
+              type="email"
+              placeholder="Votre email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="rounded-lg" />
+            
+            <Textarea
+              placeholder="Votre message"
+              rows={5}
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              className="rounded-lg" />
+            
+            <Button
+              type="submit"
+              className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full">
+              
+              <Send className="mr-2 h-4 w-4" />
+              Envoyer le message
+            </Button>
+          </motion.form>
 
-          {steps.map((step, i) => (
-            <motion.div
-              key={step.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.12 }}
-              className="relative flex flex-col items-center text-center"
-            >
-              <div className="relative z-10 w-14 h-14 rounded-full bg-accent text-accent-foreground flex items-center justify-center mb-4 shadow-lg shadow-accent/20">
-                <step.icon className="h-6 w-6" />
+          {/* Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col gap-6 justify-center">
+            
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <MapPin className="h-5 w-5 text-primary" />
               </div>
-              <span className="text-xs font-bold text-accent mb-1">Étape {step.step}</span>
-              <h3 className="font-display text-lg font-semibold mb-2">{step.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-[220px]">
-                {step.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+              <div>
+                <h3 className="font-display font-semibold mb-1">Localisation</h3>
+                <p className="text-sm text-muted-foreground">Abidjan, Côte d'Ivoire</p>
+              </div>
+            </div>
 
-        {/* Payment highlight */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-14 max-w-2xl mx-auto bg-accent/10 border border-accent/30 rounded-2xl p-6 text-center"
-        >
-          <p className="font-display font-semibold text-lg mb-1">
-            💰 Paiement en 2 fois
-          </p>
-          <p className="text-muted-foreground text-sm">
-            <span className="font-semibold text-foreground">50% à la commande</span> pour démarrer le projet —{" "}
-            <span className="font-semibold text-foreground">50% à la livraison</span> après validation et mise en ligne.
-          </p>
-        </motion.div>
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <Mail className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-display font-semibold mb-1">Email</h3>
+                <p className="text-sm text-muted-foreground">digitalrocket31@gmail.com</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-whatsapp/10 flex items-center justify-center shrink-0">
+                <MessageCircle className="h-5 w-5 text-whatsapp" />
+              </div>
+              <div>
+                <h3 className="font-display font-semibold mb-1">WhatsApp</h3>
+                <a href="https://wa.me/2250153760391"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-accent hover:underline">
+                  
+                  +225 01 53 76 03 91
+                </a>
+              </div>
+            </div>
+
+            <Button
+              asChild
+              size="lg"
+              className="bg-whatsapp text-white hover:bg-whatsapp/90 rounded-full mt-4 w-fit">
+              
+              <a
+                href="https://wa.me/2250153760391"
+                target="_blank"
+                rel="noopener noreferrer">
+                
+                <MessageCircle className="mr-2 h-5 w-5" />
+                Discuter sur WhatsApp
+              </a>
+            </Button>
+          </motion.div>
+        </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
-export default HowItWorksSection;
+export default ContactSection;
